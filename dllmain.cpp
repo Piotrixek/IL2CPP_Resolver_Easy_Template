@@ -108,6 +108,41 @@ DWORD WINAPI MainThread(LPVOID lpReserved) {
             }
         }
 
+        if (GetAsyncKeyState(VK_F9) & 1) {
+            std::cout << "F9 pressed, finding GameObject by name...\n";
+            auto gameObject = FindGameObjectByName("Player");
+            if (gameObject) {
+                std::cout << "Found GameObject: " << gameObject->GetName()->ToString() << "\n";
+            }
+        }
+
+        if (GetAsyncKeyState(VK_F10) & 1) {
+            std::cout << "F10 pressed, finding all GameObjects with tag...\n";
+            auto gameObjects = FindGameObjectsWithTag("Player");
+            for (auto& obj : gameObjects) {
+                std::cout << "Found GameObject with tag: " << obj->GetName()->ToString() << "\n";
+            }
+        }
+
+        if (GetAsyncKeyState(VK_F11) & 1) {
+            std::cout << "F11 pressed, getting component by name...\n";
+            if (!PlayerList.empty()) {
+                auto component = GetComponent<Unity::CComponent>(PlayerList[0], "SomeComponent");
+                if (component) {
+                    std::cout << "Found component in Player.\n";
+                }
+            }
+        }
+
+        if (GetAsyncKeyState(VK_F12) & 1) {
+            std::cout << "F12 pressed, setting position of the first player...\n";
+            if (!PlayerList.empty()) {
+                Unity::Vector3 newPosition = { 0.0f, 10.0f, 0.0f };
+                SetGameObjectPosition(PlayerList[0], newPosition);
+                std::cout << "Set Player position to: " << newPosition.x << ", " << newPosition.y << ", " << newPosition.z << "\n";
+            }
+        }
+
         Sleep(100);
     }
     return 0;

@@ -96,6 +96,18 @@ DWORD WINAPI MainThread(LPVOID lpReserved) {
             }
         }
 
+        if (GetAsyncKeyState(VK_F8) & 1) {
+            std::cout << "F8 pressed, cloning the first player to the same position...\n";
+            if (!PlayerList.empty()) {
+                auto playerPosition = PlayerList[0]->GetTransform()->GetPosition();
+                CloneGameObject(PlayerList[0], playerPosition);
+                std::cout << "Cloned the player to the same position.\n";
+            }
+            else {
+                std::cout << "No player found to clone.\n";
+            }
+        }
+
         Sleep(100);
     }
     return 0;

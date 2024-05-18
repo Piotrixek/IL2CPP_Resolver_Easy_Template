@@ -87,3 +87,29 @@ void SetPropertyValue(Unity::CGameObject* obj, const std::string& className, con
 
     reinterpret_cast<void(*)(void*, T)>(IL2CPP::Class::Utils::GetMethodPointer(il2cppClass, ("set_" + propertyName).c_str()))(instance, value);
 }
+
+// Helper function to clone a GameObject and set its position
+Unity::CGameObject* CloneGameObject(Unity::CGameObject* obj, const Unity::Vector3& position) {
+    auto il2cppClass = IL2CPP::Class::Find("UnityEngine.Object");
+    if (!il2cppClass) {
+        std::cerr << "Class UnityEngine.Object not found.\n";
+        return nullptr;
+    }
+
+    void* instantiateMethod = IL2CPP::Class::Utils::GetMethodPointer(il2cppClass, "Instantiate", 1);
+    if (!instantiateMethod) {
+        std::cerr << "Method Instantiate not found in class UnityEngine.Object.\n";
+        return nullptr;
+    }
+
+    auto clonedObj = reinterpret_cast<Unity::CGameObject * (*)(void*)>(instantiateMethod)(obj);
+    if (!clonedObj) {
+        std::cerr << "Failed to clone object.\n";
+        return nullptr;
+    }
+
+    auto transform = clonedObj->GetTransform();
+    transform->SetPosition(position);
+
+    return clonedObj;
+}

@@ -21,3 +21,5 @@ This project provides a simple template for working with IL2CPP-based games. It 
 
 **Getting Started**:
 This template is intended to help beginners understand the basics of working with IL2CPP and game hacking. The project includes example code for common tasks such as finding objects, invoking methods, and setting fields.
+
+**Credits to SneakyEvil  https://github.com/sneakyevil/IL2CPP_Resolver**

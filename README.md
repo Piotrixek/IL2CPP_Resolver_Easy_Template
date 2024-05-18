@@ -11,11 +11,10 @@ This project provides a simple template for working with IL2CPP-based games. It 
 **To-Do**:
 - Fix the issue with retrieving and displaying the rotation of game objects.
 - Add more examples of interacting with different game objects and methods.
-- Improve error handling and logging.
 - Provide more detailed comments and documentation for each function.
 - Add more key bindings for different functionalities.
 - Implement a cleaner and more modular code structure.
+- Imgui
 
 **Getting Started**:
-This template is intended to help beginners understand the basics of working with IL2CPP and game hacking. The project includes example code for common tasks such as finding objects, invoking methods, and setting fields. Users are encouraged to expand upon this template and adapt it to their specific needs.
-
+This template is intended to help beginners understand the basics of working with IL2CPP and game hacking. The project includes example code for common tasks such as finding objects, invoking methods, and setting fields.

@@ -105,7 +105,8 @@ void RotatePlayersToClosestMobs() {
 // Function to cache instances of Player and Mob classes
 void CacheInstances() {
     while (true) {
-
+        PlayerList.clear();
+        MobList.clear();
         std::cout << "Starting to cache instances...\n";
         auto playerList = Unity::Object::FindObjectsOfType<Unity::CComponent>("Player");
         auto mobList = Unity::Object::FindObjectsOfType<Unity::CComponent>("Mob");

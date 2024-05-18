@@ -9,6 +9,7 @@
 #include "includes/Unity/API/GameObject.hpp"
 #include "helpers/Helpers.hpp"
 #include "helpers/CacheInstances.hpp"
+#include "helpers/AdvancedHelpers.hpp"
 
 // global variables
 std::vector<Unity::CGameObject*> PlayerList;
@@ -63,7 +64,35 @@ DWORD WINAPI MainThread(LPVOID lpReserved) {
         if (GetAsyncKeyState(VK_F3) & 1) {
             std::cout << "F3 pressed, setting baseMoveSpeed to 20 for all Player instances...\n";
             for (auto& player : PlayerList) {
-                SetFieldValue<float>(player, "Player", "baseMoveSpeed", 20.0f);
+                SetFieldValue(player, "Player", "baseMoveSpeed", 20.0f);
+            }
+        }
+
+        if (GetAsyncKeyState(VK_F4) & 1) {
+            std::cout << "F4 pressed, getting static field value...\n";
+            float someValue = GetStaticFieldValue<float>("SomeClass", "someStaticField");
+            std::cout << "Static field value: " << someValue << std::endl;
+        }
+
+        if (GetAsyncKeyState(VK_F5) & 1) {
+            std::cout << "F5 pressed, setting static field value...\n";
+            SetStaticFieldValue("SomeClass", "someStaticField", 42.0f);
+            std::cout << "Static field value set to 42.\n";
+        }
+
+        if (GetAsyncKeyState(VK_F6) & 1) {
+            std::cout << "F6 pressed, getting property value...\n";
+            for (auto& player : PlayerList) {
+                float health = GetPropertyValue<float>(player, "Player", "Health");
+                std::cout << "Player Health: " << health << std::endl;
+            }
+        }
+
+        if (GetAsyncKeyState(VK_F7) & 1) {
+            std::cout << "F7 pressed, setting property value...\n";
+            for (auto& player : PlayerList) {
+                SetPropertyValue(player, "Player", "Health", 100.0f);
+                std::cout << "Player Health set to 100.\n";
             }
         }
 

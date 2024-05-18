@@ -113,3 +113,76 @@ Unity::CGameObject* CloneGameObject(Unity::CGameObject* obj, const Unity::Vector
 
     return clonedObj;
 }
+
+// Helper function to find a GameObject by name
+Unity::CGameObject* FindGameObjectByName(const std::string& name) {
+    auto gameObject = Unity::GameObject::Find(name.c_str());
+    if (!gameObject) {
+        std::cerr << "GameObject " << name << " not found.\n";
+    }
+    return gameObject;
+}
+
+// Helper function to find all GameObjects with a specific tag
+std::vector<Unity::CGameObject*> FindGameObjectsWithTag(const std::string& tag) {
+    auto gameObjectsArray = Unity::GameObject::FindWithTag(tag.c_str());
+    std::vector<Unity::CGameObject*> gameObjects;
+    if (!gameObjectsArray) {
+        std::cerr << "No GameObjects found with tag " << tag << ".\n";
+        return gameObjects;
+    }
+    for (size_t i = 0; i < gameObjectsArray->m_uMaxLength; ++i) {
+        gameObjects.push_back(gameObjectsArray->operator[](i));
+    }
+    return gameObjects;
+}
+
+// Helper function to get a component by name
+template<typename T>
+T* GetComponent(Unity::CGameObject* obj, const std::string& componentName) {
+    auto component = obj->GetComponent(componentName.c_str());
+    if (!component) {
+        std::cerr << "Component " << componentName << " not found in GameObject.\n";
+        return nullptr;
+    }
+    return reinterpret_cast<T*>(component);
+}
+
+// Helper function to get all components by name
+template<typename T>
+std::vector<T*> GetComponents(Unity::CGameObject* obj, const std::string& componentName) {
+    auto componentsArray = obj->GetComponents(componentName.c_str());
+    std::vector<T*> components;
+    if (!componentsArray) {
+        std::cerr << "No components found with name " << componentName << " in GameObject.\n";
+        return components;
+    }
+    for (size_t i = 0; i < componentsArray->m_uMaxLength; ++i) {
+        components.push_back(reinterpret_cast<T*>(componentsArray->operator[](i)));
+    }
+    return components;
+}
+
+// Helper function to set the position of a GameObject
+void SetGameObjectPosition(Unity::CGameObject* obj, const Unity::Vector3& position) {
+    auto transform = obj->GetTransform();
+    transform->SetPosition(position);
+}
+
+// Helper function to get the position of a GameObject
+Unity::Vector3 GetGameObjectPosition(Unity::CGameObject* obj) {
+    auto transform = obj->GetTransform();
+    return transform->GetPosition();
+}
+
+// Helper function to set the rotation of a GameObject
+void SetGameObjectRotation(Unity::CGameObject* obj, const Unity::Quaternion& rotation) {
+    auto transform = obj->GetTransform();
+    transform->SetRotation(rotation);
+}
+
+// Helper function to get the rotation of a GameObject
+Unity::Quaternion GetGameObjectRotation(Unity::CGameObject* obj) {
+    auto transform = obj->GetTransform();
+    return transform->GetRotation();
+}

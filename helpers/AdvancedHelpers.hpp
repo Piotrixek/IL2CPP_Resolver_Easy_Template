@@ -266,3 +266,46 @@ void CountAndPrintInstances(const std::string& className) {
         std::cout << "Instance " << i + 1 << ": " << gameObject->GetName()->ToString() << "\n";
     }
 }
+
+// Helper function to find all instances of a class and invoke a method on each instance
+template<typename Ret, typename... Args>
+void FindInstancesAndInvokeMethod(const std::string& instanceClassName, const std::string& methodClassName, const std::string& methodName, Args... args) {
+    auto instanceClass = IL2CPP::Class::Find(instanceClassName.c_str());
+    if (!instanceClass) {
+        std::cerr << "Instance class " << instanceClassName << " not found.\n";
+        return;
+    }
+
+    auto methodClass = IL2CPP::Class::Find(methodClassName.c_str());
+    if (!methodClass) {
+        std::cerr << "Method class " << methodClassName << " not found.\n";
+        return;
+    }
+
+    void* methodPointer = IL2CPP::Class::Utils::GetMethodPointer(methodClass, methodName.c_str(), sizeof...(args));
+    if (!methodPointer) {
+        std::cerr << "Method " << methodName << " not found in class " << methodClassName << ".\n";
+        return;
+    }
+
+    auto instances = Unity::Object::FindObjectsOfType<Unity::CGameObject>(instanceClassName.c_str());
+    if (!instances || instances->m_uMaxLength == 0) {
+        std::cerr << "No instances of class " << instanceClassName << " found.\n";
+        return;
+    }
+
+    for (size_t i = 0; i < instances->m_uMaxLength; ++i) {
+        auto instance = instances->operator[](i);
+        auto component = instance->GetComponent(methodClassName.c_str());
+        if (component) {
+            try {
+                reinterpret_cast<Ret(*)(void*, Args...)>(methodPointer)(component, args...);
+                std::cout << "Invoked method " << methodName << " on instance of class " << methodClassName << ".\n";
+            }
+            catch (const std::exception& e) {
+                std::cerr << "Error invoking method on instance: " << e.what() << "\n";
+            }
+        }
+    }
+}
+

@@ -365,29 +365,7 @@ void CountAndPrintInstances(const std::string& className) {
     }
 }
 
-// Helper function to create an instance of a class
-Unity::CGameObject* CreateInstance(const std::string& className) {
-    auto il2cppClass = IL2CPP::Class::Find(className.c_str());
-    if (!il2cppClass) {
-        std::cerr << "Class " << className << " not found.\n";
-        return nullptr;
-    }
 
-    void* createInstanceMethod = IL2CPP::Class::Utils::GetMethodPointer(il2cppClass, "Instantiate", 1);
-    if (!createInstanceMethod) {
-        std::cerr << "Instantiate method not found in class " << className << ".\n";
-        return nullptr;
-    }
-
-    auto instance = reinterpret_cast<Unity::CGameObject * (UNITY_CALLING_CONVENTION)(void*)>(createInstanceMethod)(nullptr);
-    if (!instance) {
-        std::cerr << "Failed to create instance of class " << className << ".\n";
-        return nullptr;
-    }
-
-    std::cout << "Instance of class " << className << " created.\n";
-    return instance;
-}
 
 // Helper function to find all GameObjects with a specific tag and invoke a method on their components
 template<typename Ret, typename... Args>

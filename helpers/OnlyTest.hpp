@@ -188,37 +188,7 @@ Unity::Quaternion GetGameObjectRotation(Unity::CGameObject* obj) {
     return transform->GetRotation();
 }
 
-// Helper function to create an instance of a class and invoke a method on it
-template<typename Ret, typename... Args>
-Ret CreateInstanceAndInvoke(const std::string& className, const std::string& ctorName, const std::string& methodName, Args... ctorArgs) {
-    auto il2cppClass = IL2CPP::Class::Find(className.c_str());
-    if (!il2cppClass) {
-        std::cerr << "Class " << className << " not found.\n";
-        return Ret();
-    }
-
-    void* ctorPointer = IL2CPP::Class::Utils::GetMethodPointer(il2cppClass, ctorName.c_str(), sizeof...(ctorArgs));
-    if (!ctorPointer) {
-        std::cerr << "Constructor " << ctorName << " not found in class " << className << ".\n";
-        return Ret();
-    }
-
-    auto instance = reinterpret_cast<Unity::il2cppObject * (*)(Args...)>(ctorPointer)(ctorArgs...);
-    if (!instance) {
-        std::cerr << "Failed to create instance of class " << className << ".\n";
-        return Ret();
-    }
-
-    void* methodPointer = IL2CPP::Class::Utils::GetMethodPointer(il2cppClass, methodName.c_str(), 0);
-    if (!methodPointer) {
-        std::cerr << "Method " << methodName << " not found in class " << className << ".\n";
-        return Ret();
-    }
-
-    return reinterpret_cast<Ret(*)(void*)>(methodPointer)(instance);
-}
-
-// Helper function to print all fields of an instance
+// Helper function to print all fields of an instance (test)
 void PrintInstanceFields(Unity::il2cppObject* instance, const std::string& className) {
     auto il2cppClass = IL2CPP::Class::Find(className.c_str());
     if (!il2cppClass) {
@@ -255,7 +225,7 @@ std::vector<Unity::CGameObject*> FindAllInstancesByClass(const std::string& clas
     }
     return instances;
 }
-
+// test 1
 template<typename Ret, typename... Args>
 Ret InvokeMethodByRVA(uintptr_t rva, void* instance, Args... args) {
     auto methodPointer = reinterpret_cast<Ret(UNITY_CALLING_CONVENTION)(void*, Args...)>(rva);

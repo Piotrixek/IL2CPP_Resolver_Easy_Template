@@ -17,7 +17,7 @@ This project provides a simple template for working with IL2CPP-based games. It 
 - Imgui
 
   **Problems**
-  doesn't work shortcut? sometimes you need to go to your created console and press any key on keyboard and it will continue.
+  Problems with the shortcut not working? Sometimes you need to go to your created console and press any key on the keyboard, and it will continue.
 
 **Getting Started**:
 This template is intended to help beginners understand the basics of working with IL2CPP and game hacking. The project includes example code for common tasks such as finding objects, invoking methods, and setting fields.

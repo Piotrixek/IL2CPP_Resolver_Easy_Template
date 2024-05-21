@@ -186,3 +186,83 @@ Unity::Quaternion GetGameObjectRotation(Unity::CGameObject* obj) {
     auto transform = obj->GetTransform();
     return transform->GetRotation();
 }
+
+// Helper function to destroy all instances of a class
+void DestroyInstancesByClass(const std::string& className) {
+    auto classType = IL2CPP::Class::Find(className.c_str());
+    if (!classType) {
+        std::cerr << "Class " << className << " not found.\n";
+        return;
+    }
+
+    auto instancesArray = Unity::Object::FindObjectsOfType<Unity::CObject>(className.c_str());
+    if (!instancesArray || instancesArray->m_uMaxLength == 0) {
+        std::cerr << "No instances of class " << className << " found.\n";
+        return;
+    }
+
+    for (size_t i = 0; i < instancesArray->m_uMaxLength; ++i) {
+        auto instance = instancesArray->operator[](i);
+        if (instance) {
+            instance->Destroy();
+            std::cout << "Destroyed instance of class " << className << ".\n";
+        }
+    }
+}
+
+// Helper function to destroy all GameObjects with a specific tag
+void DestroyGameObjectsByTag(const std::string& tag) {
+    auto gameObjectsArray = Unity::GameObject::FindWithTag(tag.c_str());
+    if (!gameObjectsArray) {
+        std::cerr << "No GameObjects found with tag " << tag << ".\n";
+        return;
+    }
+
+    for (size_t i = 0; i < gameObjectsArray->m_uMaxLength; ++i) {
+        auto gameObject = gameObjectsArray->operator[](i);
+        gameObject->Destroy();
+        std::cout << "Destroyed GameObject with tag " << tag << ": " << gameObject->GetName()->ToString() << "\n";
+    }
+}
+
+// Helper function to create an instance of a class
+template<typename T>
+T* CreateInstance(const std::string& className) {
+    auto il2cppClass = IL2CPP::Class::Find(className.c_str());
+    if (!il2cppClass) {
+        std::cerr << "Class " << className << " not found.\n";
+        return nullptr;
+    }
+
+    auto instance = reinterpret_cast<T*>(Unity::Object::New(il2cppClass));
+    if (!instance) {
+        std::cerr << "Failed to create instance of class " << className << ".\n";
+        return nullptr;
+    }
+
+    std::cout << "Successfully created instance of class " << className << " at address 0x" << std::hex << reinterpret_cast<uintptr_t>(instance) << std::dec << "\n";
+    return instance;
+}
+
+// Helper function to count and print all instances of a class
+void CountAndPrintInstances(const std::string& className) {
+    auto il2cppClass = IL2CPP::Class::Find(className.c_str());
+    if (!il2cppClass) {
+        std::cerr << "Class " << className << " not found.\n";
+        return;
+    }
+
+    auto allObjects = Unity::Object::FindObjectsOfType<Unity::CGameObject>(className.c_str());
+    if (!allObjects) {
+        std::cout << "No instances of class " << className << " found.\n";
+        return;
+    }
+
+    size_t count = allObjects->m_uMaxLength;
+    std::cout << "Number of instances of class " << className << ": " << count << "\n";
+
+    for (size_t i = 0; i < count; ++i) {
+        auto gameObject = allObjects->operator[](i);
+        std::cout << "Instance " << i + 1 << ": " << gameObject->GetName()->ToString() << "\n";
+    }
+}

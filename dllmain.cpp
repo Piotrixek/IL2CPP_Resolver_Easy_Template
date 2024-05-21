@@ -49,6 +49,13 @@ DWORD WINAPI MainThread(LPVOID lpReserved) {
         }, NULL, 0, NULL);
 
     while (true) {
+        /*
+            if (GetAsyncKeyState(VK_F1) & 1) {
+            // Assuming "AvatarMotor" is the instance class and "MVAvatarLocal" is the method class
+            std::cout << "F2 pressed, invoking Die on all AvatarMotor instances...\n";
+            FindInstancesAndInvokeMethod<void>("AvatarMotor", "MVAvatarLocal", "Die");
+        }
+        */
         if (GetAsyncKeyState(VK_F1) & 1) {
             std::cout << "F1 pressed, printing all Player and Mob instances...\n";
             PrintAllInstances(PlayerList, MobList);

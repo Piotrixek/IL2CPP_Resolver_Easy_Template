@@ -9,7 +9,6 @@ This project provides a simple template for working with IL2CPP-based games. It 
 - Continuous caching of player and mob instances.
 
 **To-Do**:
-- Fix the issue with retrieving and displaying the rotation of game objects for easy and fast aimbot setup. 
 - Add more examples of interacting with different game objects and methods.
 - Provide more detailed comments and documentation for each function.
 - Add more key bindings for different functionalities.
